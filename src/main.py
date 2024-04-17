@@ -1,7 +1,7 @@
 # Import necessary modules
 import sys
 sys.path.append('scripts')  # Adds the 'scripts' directory to the path
-import data_preprocessing  # Imports the preprocessing module
+#import data_preprocessing  # Imports the preprocessing module
 
 import pandas as pd
 
