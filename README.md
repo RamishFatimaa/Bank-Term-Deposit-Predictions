@@ -1,6 +1,9 @@
-**The purpose of the file dataset.csv in the dataset is to evaluate and test the accuracy of the predictive model for predicting customer subscription to term deposits based on the provided features**
+# Bank Term Deposit Predictions Dataset
 
-# Dataset Description
+## Data Source
+This dataset is sourced from [Kaggle: Bank Term Deposit Predictions](https://www.kaggle.com).
+
+## Dataset Description
 
 Below is a description of each field in the dataset:
 
@@ -19,6 +22,13 @@ Below is a description of each field in the dataset:
 | `pdays`   | The number of days passed by after contact from the previous campaign.      | Numerical   |
 | `poutcome`| Outcome from the previous marketing campaign.                               | Categorical |
 
-### Note:
-- EDA to be done.
+## Initial Business Questions
+
+The initial business questions we proposed are as follows:
+
+1. Can we find out the bank's operation status by looking into these individual bank customers' usage records? Any potential problems or risks revealed by the data?
+2. How to predict whether a customer would subscribe to the term deposit service? What factors affect the customers' choice most?
+3. Can we cluster the customers into different segments for further marketing purposes?
+
+### Note: EDA IN PROGRESS
 
