@@ -11,7 +11,7 @@ def main():
     # Preprocess the data
     cleaned_df = preprocess_data(df)
     print("Data preprocessing completed")
-    print("Testimh")
+    print("Testing Nidhi")
     # You can now proceed with cleaned_df for further analysis or modeling
 
 if __name__ == "__main__":
