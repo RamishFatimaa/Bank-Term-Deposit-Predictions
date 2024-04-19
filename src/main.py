@@ -15,6 +15,7 @@ def main():
     #cleaned_df = preprocess_data(df)
     print("Data preprocessing completed")
     print("Test")
+    print("Hi")
    
 
 if __name__ == "__main__":

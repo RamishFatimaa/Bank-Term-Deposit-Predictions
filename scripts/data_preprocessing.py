@@ -9,12 +9,14 @@ def preprocess_data(df):
     print(df.head())  # Show the first few rows of the DataFrame
     print(df.describe())  # Summary statistics for numerical columns
     print(df.info())  # Info about datatypes and missing values
+    print(df.shape())
 
     # Data cleaning
     # Handling missing values
     
     # Convert data types if necessary
     # df['column_name'] = df['column_name'].astype('int')
+
 
 
     return df
