@@ -1,7 +1,7 @@
 # Import necessary modules
 import sys
 sys.path.append('scripts')  # Adds the 'scripts' directory to the path
-import data_preprocessing  # Imports the preprocessing module
+#import data_preprocessing  # Imports the preprocessing module
 
 import pandas as pd
 
@@ -14,7 +14,7 @@ def main():
     # Preprocess the data
     #cleaned_df = preprocess_data(df)
     print("Data preprocessing completed")
-    print("Test")
+    print("Testing")
    
 
 if __name__ == "__main__":
