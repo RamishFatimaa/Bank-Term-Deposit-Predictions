@@ -8,6 +8,7 @@ import pandas as pd
 scripts_dir = 'D:\\Northeastern\\Bank Term Deposit Predictions\\scripts'
 sys.path.insert(1, scripts_dir)
 import data_preprocessing  # Imports the preprocessing module
+import Question2
 
 def main():
     df_path = 'D:\\Northeastern\\Bank Term Deposit Predictions\\data\\dataset.csv'

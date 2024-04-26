@@ -6,6 +6,15 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
 def preprocess_data(df):
     print("Starting preprocessing...")
@@ -25,7 +34,8 @@ def preprocess_data(df):
     important_columns = ['balance', 'age', 'duration', 'campaign', 'pdays']
     df = detect_outliers_isolation_forest(df, important_columns)
     #df = normalize_data(df, ['balance', 'age', 'duration', 'campaign', 'pdays'])
-    print(df.head())
+    
+    
     
     return df
 
@@ -33,20 +43,41 @@ def basic_data_inspection(df):
     print("Performing basic data inspection...")
     print(df.head())
     print(df.describe())
+    df.shape
     print("Data types and missing values info:")
     info = df.info()
+    
+    # Check for duplicate rows
+    duplicate_rows = df.duplicated()
+    # Count the number of duplicate rows
+    num_duplicates = duplicate_rows.sum()
+
+    # Print the number of duplicate rows
+    print("Number of duplicate rows:", num_duplicates)
+    
+    unique_education_values = df['education'].unique()
+    print("Number of unique values in Education:",unique_education_values)
+    
+    # Replace 'unknown' values with NaN
+    df['education'] = df['education'].replace('unknown', np.nan)
+
+    # Impute NaN values with the most frequent category, which is 'secondary'
+    most_frequent_education = 'secondary'
+    df['education'] = df['education'].fillna(most_frequent_education)
 
     if 'object' in df.dtypes.values:
         print("Categorical features description:")
         print(df.select_dtypes(include=['object']).describe())
     else:
         print("No categorical (object type) columns to describe.")
+        
     # Visualization of distributions of numerical features
     for col in df.select_dtypes(include=['int64', 'float64']).columns:
         plt.figure(figsize=(10, 4))
         sns.histplot(df[col], kde=True)
         plt.title(f'Distribution of {col}')
-        # plt.show()
+        #plt.show()
+        
     sns.pairplot(df.select_dtypes(include=[np.number]), diag_kind='kde')
     #plt.show()
     
