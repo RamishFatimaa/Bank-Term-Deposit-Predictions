@@ -14,8 +14,8 @@ scripts_dir = 'D:\\Northeastern\\Bank Term Deposit Predictions\\scripts'
 sys.path.insert(1, scripts_dir)
 #import data_preprocessing  # Imports the preprocessing module
 import Question1
-#import Question2
-#import Question3
+import Question2
+import Question3
 
 def main():
     df_path = 'D:\\Northeastern\\Bank Term Deposit Predictions\\data\\dataset.csv'
