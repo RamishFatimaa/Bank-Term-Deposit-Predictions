@@ -35,8 +35,6 @@ def preprocess_data(df):
     df = detect_outliers_isolation_forest(df, important_columns)
     #df = normalize_data(df, ['balance', 'age', 'duration', 'campaign', 'pdays'])
     
-    
-    
     return df
 
 def basic_data_inspection(df):
