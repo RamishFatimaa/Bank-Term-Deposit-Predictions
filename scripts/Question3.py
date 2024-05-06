@@ -10,10 +10,10 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-#from sklearnex import patch_sklearn
-#patch_sklearn()
+# from sklearnex import patch_sklearn
+# patch_sklearn()
 
-df0 = pd.read_csv('D:\\Northeastern\\Bank Term Deposit Predictions\\data\\train.csv')
+df0 = pd.read_csv('train.csv')
 df0.head()
 
 
@@ -82,18 +82,25 @@ df_y.describe()
 # In[8]:
 
 
+df0.drop(columns=['month', 'day']).describe()
+
+
+# In[9]:
+
+
 # Outcome by Jobs
 job_outcome = df0.groupby('job')['y'].value_counts(normalize=True).unstack() * 100
-job_outcome.plot(kind='barh', stacked=True)
+a1 = job_outcome.plot(kind='barh', stacked=True)
 plt.title('Outcome by Jobs')
 plt.xlabel('Outcome')
 plt.ylabel('Job')
 plt.legend(title='Outcome')
 plt.tight_layout()
 plt.show()
+job_outcome
 
 
-# In[9]:
+# In[10]:
 
 
 # Outcome by marital status
@@ -105,44 +112,100 @@ plt.ylabel('Marital Status')
 plt.legend(title='Outcome')
 plt.tight_layout()
 plt.show()
+mar_outcome
 
 
-# In[10]:
+# In[11]:
 
 
 # Outcome by education
-mar_outcome = df0.groupby('education')['y'].value_counts(normalize=True).unstack() * 100
-mar_outcome.plot(kind='barh', stacked=True)
+edu_outcome = df0.groupby('education')['y'].value_counts(normalize=True).unstack() * 100
+edu_outcome.plot(kind='barh', stacked=True)
 plt.title('Outcome by Education')
 plt.xlabel('Outcome')
 plt.ylabel('Education')
 plt.legend(title='Outcome')
 plt.tight_layout()
 plt.show()
-
-
-# In[11]:
-
-
-# Outcome by default
-pd.crosstab(df0['y'], df0['default'])
+edu_outcome
 
 
 # In[12]:
 
 
-# Outcome by housing loan
-pd.crosstab(df0['y'], df0['housing'])
+# Outcome by means of contact
+con_outcome = df0.groupby('contact')['y'].value_counts(normalize=True).unstack() * 100
+con_outcome.plot(kind='barh', stacked=True)
+plt.title('Outcome by Means of Contact')
+plt.xlabel('Outcome')
+plt.ylabel('Contact')
+plt.legend(title='Outcome')
+plt.tight_layout()
+plt.show()
+con_outcome
 
 
 # In[13]:
 
 
-# Outcome by personal loan
-pd.crosstab(df0['y'], df0['loan'])
+# Outcome by default
+def_outcome = df0.groupby('default')['y'].value_counts(normalize=True).unstack() * 100
+def_outcome.plot(kind='barh', stacked=True)
+plt.title('Outcome by Default')
+plt.xlabel('Outcome')
+plt.ylabel('Default')
+plt.legend(title='Outcome')
+plt.tight_layout()
+plt.show()
+def_outcome
 
 
 # In[14]:
+
+
+# Outcome by housing loan
+house_outcome = df0.groupby('housing')['y'].value_counts(normalize=True).unstack() * 100
+house_outcome.plot(kind='barh', stacked=True)
+plt.title('Outcome by Housing Loan')
+plt.xlabel('Outcome')
+plt.ylabel('Housing')
+plt.legend(title='Outcome')
+plt.tight_layout()
+plt.show()
+house_outcome
+
+
+# In[15]:
+
+
+# Outcome by personal loan
+loan_outcome = df0.groupby('loan')['y'].value_counts(normalize=True).unstack() * 100
+loan_outcome.plot(kind='barh', stacked=True)
+plt.title('Outcome by Personal Loan')
+plt.xlabel('Outcome')
+plt.ylabel('Loan')
+plt.legend(title='Outcome')
+plt.tight_layout()
+plt.show()
+loan_outcome
+
+
+# In[16]:
+
+
+# Outcome by outcome of previous campaign
+pre_outcome = df0.groupby('poutcome')['y'].value_counts(normalize=True).unstack() * 100
+pre_outcome.plot(kind='barh', stacked=True)
+plt.title('Outcome by Outcome of Previous Campaign')
+plt.xlabel('Outcome')
+plt.ylabel('Previous')
+plt.legend(title='Outcome')
+plt.tight_layout()
+plt.show()
+pre_outcome
+
+
+# In[17]:
 
 
 # Call instances in each month
@@ -161,7 +224,7 @@ plt.tight_layout()
 plt.show()
 
 
-# In[15]:
+# In[18]:
 
 
 # Durations of call and successful calls
@@ -173,12 +236,14 @@ plt.tight_layout()
 plt.show()
 
 mean_duration = df0.groupby('y')['duration'].mean()
-print(mean_duration)
+mean_duration
 
 
 # # Data modelling
 
-# In[16]:
+# Feature Encoding
+
+# In[19]:
 
 
 # Feature encoding
@@ -189,6 +254,9 @@ df = df0
 # Remove time series features
 df0.drop(columns=['month', 'day', 'date'], inplace = True)
 
+# Remove unrelative features
+df0.drop(columns=['marital', 'contact'], inplace = True)
+
 # Binary features
 df['default'] = pd.get_dummies(df['default'])['yes']
 df['housing'] = pd.get_dummies(df['housing'])['yes']
@@ -197,20 +265,18 @@ df['y'] = pd.get_dummies(df['y'])['yes']
 df.replace({True: 1, False: 0}, inplace = True)
 
 # Ordered categorical features
-df['education'] = OrdinalEncoder(categories=[['primary', 'secondary', 'tertiary']]).fit_transform(df[['education']])
 df['poutcome'] = OrdinalEncoder(categories=[['failure', 'success', 'other']]).fit_transform(df[['poutcome']])
+df['education'] = OrdinalEncoder(categories=[['primary', 'secondary', 'tertiary']]).fit_transform(df[['education']])
 
-# Inordered catrgorical features (one-hot encoding)
-df['marital'] = OneHotEncoder(sparse_output = False).fit_transform(df[['marital']])
-df['contact'] = OneHotEncoder(sparse_output = False).fit_transform(df[['contact']])
-df['marital'] = OneHotEncoder(sparse_output = False).fit_transform(df[['marital']])
+# Unordered catrgorical features (one-hot encoding)
+df['job'] = OneHotEncoder(sparse_output = False).fit_transform(df[['job']])
 
-# Inordered catrgorical features (target encoding)
-target_code = df.groupby('job')['y'].mean()
-df['job'] = df['job'].map(target_code)
+# Unused Target Encoding
+#target_code = df.groupby('job')['y'].mean()
+#df['job'] = df['job'].map(target_code)
 
 
-# In[17]:
+# In[20]:
 
 
 # Split train and test set
@@ -222,20 +288,42 @@ y = df.iloc[:, -1]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=2024)
 
 
-# In[18]:
+# Decision Tree
+
+# In[55]:
+
+
+# Searching for optimal parameter
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import GridSearchCV
+
+dt_cl = DecisionTreeClassifier()
+param_dt = {'max_depth': list(range(1, 11)),
+    'min_samples_split': list(range(1, 6)),
+    'min_samples_leaf': list(range(1, 6))}
+
+grid_dt = GridSearchCV(estimator = dt_cl, param_grid = param_dt, cv = 10)
+grid_dt.fit(X_train, y_train)
+
+print("Optimal Parameters:", grid_dt.best_params_)
+print("Best Score:", grid_dt.best_score_)
+
+
+# In[56]:
 
 
 # Decision tree modelling
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import GridSearchCV
 
-dt = DecisionTreeClassifier(random_state = 2024)
+dt = DecisionTreeClassifier(max_depth = 5, min_samples_split = 2, min_samples_leaf = 1, random_state = 2024)
 dt.fit(X_train, y_train)
 
 # Make prediction on test set
-y_pred = dt.predict(X_test)
+y_pred_dt = dt.predict(X_test)
 
 
-# In[19]:
+# In[22]:
 
 
 # Model visualization
@@ -251,39 +339,37 @@ with open("dt.dot") as f:
 graphviz.Source(dot_graph)
 
 
-# In[20]:
+# In[23]:
 
 
 # Performance report on test set
 from sklearn.metrics import accuracy_score, classification_report
 
-print(classification_report(y_test, y_pred))
+print(classification_report(y_test, y_pred_dt))
 
 
-# In[21]:
+# In[24]:
 
 
 # Confusion matrix
 from sklearn.metrics import confusion_matrix
 
-test_result = dt.predict(X_test)
-matrix = confusion_matrix(y_test, test_result)
-
-print(matrix)
+matrix_dt = confusion_matrix(y_test, y_pred_dt)
+print(matrix_dt)
 
 
-# In[22]:
+# In[25]:
 
 
 # ROC curve
 from sklearn.metrics import roc_curve, auc
 
-y_score = dt.predict_proba(X_test)[:, 1]
-fpr, tpr, _ = roc_curve(y_test, y_score)
-roc_auc = auc(fpr, tpr)
+y_score_dt = dt.predict_proba(X_test)[:, 1]
+fpr1, tpr1, thre1 = roc_curve(y_test, y_score_dt)
+roc_auc1 = auc(fpr1, tpr1)
 
 plt.figure()
-plt.plot(fpr, tpr, color='cyan', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+plt.plot(fpr1, tpr1, color='cyan', lw=2, label='ROC curve (area = %0.2f)' % roc_auc1)
 plt.plot([0, 1], [0, 1], color='magenta', lw=2, linestyle='--')
 plt.xlim([0.0, 1.0])
 plt.ylim([0.0, 1.05])
@@ -293,15 +379,97 @@ plt.title('ROC Curve')
 plt.legend(loc="lower right")
 plt.show()
 
-print('AUC:', roc_auc)
+bthre1 = thre1[np.argmax(tpr1 - fpr1)]
+print('Best Threshold:', bthre1)
 
 
-# In[23]:
+# In[26]:
+
+
+# Confusion matrix by revised threshold
+y_dt_adjusted = (y_score_dt >= bthre1).astype(int)
+matrix_dt2 = confusion_matrix(y_test, y_dt_adjusted)
+
+print(matrix_dt2)
+
+
+# In[27]:
 
 
 # Cross validation
 from sklearn.model_selection import cross_val_score
 
-scores = cross_val_score(dt, X, y, cv=10, scoring='accuracy')
-scores
+scores_dt = cross_val_score(dt, X, y, cv=10, scoring='accuracy')
+scores_dt
+
+
+# AdaBoost
+
+# In[66]:
+
+
+# AdaBoost modelling
+from sklearn.ensemble import AdaBoostClassifier
+
+ada = AdaBoostClassifier(estimator = dt, n_estimators = 100, algorithm = 'SAMME', random_state = 2024)
+ada.fit(X_train, y_train)
+
+# Make prediction on test set
+y_pred_ada = ada.predict(X_test)
+
+
+# In[67]:
+
+
+# Performance report on test set
+print(classification_report(y_test, y_pred_ada))
+
+
+# In[68]:
+
+
+# Confusion matrix
+matrix_ada = confusion_matrix(y_test, y_pred_ada)
+print(matrix_ada)
+
+
+# In[69]:
+
+
+# ROC curve
+y_score_ada = ada.predict_proba(X_test)[:, 1]
+fpr2, tpr2, thre2 = roc_curve(y_test, y_score_ada)
+roc_auc2 = auc(fpr2, tpr2)
+
+plt.figure()
+plt.plot(fpr2, tpr2, color='cyan', lw=2, label='ROC curve (area = %0.2f)' % roc_auc2)
+plt.plot([0, 1], [0, 1], color='magenta', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve')
+plt.legend(loc="lower right")
+plt.show()
+
+bthre2 = thre2[np.argmax(tpr2 - fpr2)]
+print('Best Threshold:', bthre2)
+
+
+# In[70]:
+
+
+# Confusion matrix by revised threshold
+y_ada_adjusted = (y_score_ada >= bthre2).astype(int)
+matrix_ada2 = confusion_matrix(y_test, y_ada_adjusted)
+
+print(matrix_ada2)
+
+
+# In[71]:
+
+
+# Cross validation
+scores_ada = cross_val_score(ada, X, y, cv=10, scoring='accuracy')
+scores_ada
 
