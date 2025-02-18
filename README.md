@@ -1,8 +1,5 @@
 # Bank Term Deposit Predictions Dataset
 
-## Data Source
-This dataset is sourced from [Kaggle: Bank Term Deposit Predictions](https://www.kaggle.com).
-
 ## Group Members
 - Nidhi
 - Jeetesh
@@ -14,6 +11,10 @@ This dataset is sourced from [Kaggle: Bank Term Deposit Predictions](https://www
 This project focuses on predicting customer subscription to term deposits based on historical marketing campaign data. By leveraging machine learning techniques, we aim to identify potential subscribers and optimize marketing efforts.
 
 ## Dataset
+
+## Data Source
+This dataset is sourced from [Kaggle: Bank Term Deposit Predictions](https://www.kaggle.com).
+
 ### **Description:**
 The dataset contains records of a bank's marketing campaign interactions with customers. 
 
